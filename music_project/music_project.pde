@@ -4,6 +4,8 @@ BeatDetector bd;
 Amplitude amp;
 AudioIn in;
 color black = color(0, 0, 0);
+color red = color(255, 0, 0);
+color green = color(0, 255, 0);
 
 void setup()
 {
@@ -27,11 +29,16 @@ void draw()
   println(amp.analyze());
   
   float sans = amp.analyze() * (float)Math.pow(10, 6);
+  float sansLerp = lerp(sans/4, sans, 0.5);
   
   /*float totalSound = 0;
   totalSound += abs(amp.analyze());
   println(totalSound);*/
-  fill(255, 0, 0);
+  fill(red);
   circle(width / 2, height / 2, sans);
   println(sans);
+  
+  fill(green);
+  circle(width / 2, height / 3, sansLerp);
+  println(sansLerp);
 }
