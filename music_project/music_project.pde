@@ -33,6 +33,7 @@ void draw()
   float avgSound = 0;
   float visSound = 0;
   float half = height / 2;
+  float soundLerp;
   
   for (int i = 0; i < ab.size(); i++)
   {
@@ -42,7 +43,7 @@ void draw()
     float m = map(i, 0, ab.size(), 0, 360); // For color
     //println(m);
     //stroke(m, 100, 100); This makes the line gradient through all 360 degrees of color in HSB
-    line(i, half, i, half + ab.get(i) * half / 2); // add lerp to make less jarring
+    line(i, half, i, half + ab.get(i) * half / 2); // add lerp to make less jarring?
   }
   
   println("totalSound: " + totalSound);
@@ -50,7 +51,12 @@ void draw()
   println("avgSound: " + avgSound);
   visSound = lerp(visSound, avgSound, 0.1);
   println("visSound: " + visSound);
-  circle(half, half, 100 + visSound * 10000); // add lerp to make less jarring
+  soundLerp = visSound * 10000;
+  circle(half, half, 100 + soundLerp / 2); // add lerp to make less jarring?
+  println("soundlerp" + soundLerp);
+  
+  createBone(100, 100, 50, false);
+  createBone(600, 500, 50, true);
 }
 
 void keyPressed()
@@ -65,5 +71,26 @@ void keyPressed()
     {
       ap.play();
     }
+  }
+}
+
+void createBone(float startingPosX, float startingPosY, float size, boolean vertical)
+{
+  noStroke();
+  if (!vertical)
+  {
+    rect(startingPosX, startingPosY, size * 2, size / 4);
+    circle(startingPosX, startingPosY + size / 4, size / 3);
+    circle(startingPosX, startingPosY, size / 3);
+    circle(startingPosX + size * 2, startingPosY + size / 4, size /3);
+    circle(startingPosX + size * 2, startingPosY, size / 3);
+  }
+  else
+  {
+    rect(startingPosX, startingPosY, size / 4, size * 2);
+    circle(startingPosX, startingPosY, size / 3);
+    circle(startingPosX + size / 4, startingPosY, size / 3);
+    circle(startingPosX, startingPosY + size * 2, size / 3);
+    circle(startingPosX + size / 4, startingPosY + size * 2, size / 3);
   }
 }
