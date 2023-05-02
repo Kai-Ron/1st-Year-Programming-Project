@@ -10,6 +10,9 @@ AudioPlayer ap;
 AudioInput ai;
 AudioBuffer ab;
 
+int arrayLength = 8; // Number of bones assigned here
+Bone[] bones = new Bone[arrayLength];
+
 void setup()
 {
   colorMode(HSB, 360, 100, 100);
@@ -22,21 +25,28 @@ void setup()
   ap.play();
   ab = ap.mix;
   
-  int arrayLength = 8;
-  Bone[] bones = new Bone[arrayLength];
   //bones assigned using x, y, size, xdir, ydir, vert
   
   for (int i = 0; i < arrayLength; i++)
   {
-    bones[i] = (0f, width / (i + 1), 50f, 0.1f, 0f, true);
+    bones[i] = new Bone(width / (i + 1), 0f, 50f, 1, 0f, true);
   }
 }
 
 void draw()
-{
-  
+{ 
   background(0, 0, 0); //black
   stroke(0, 0, 50); //grey
+  
+  for (int i = 0; i < arrayLength; i++)
+  {
+    bones[i].display();
+  }
+  
+  for (int i = 0; i < arrayLength; i++)
+  {
+    bones[i].movement();
+  }
   
   float totalSound = 0;
   float avgSound = 0;
@@ -121,9 +131,11 @@ class Bone
   
   void display()
   {
+    fill(0, 0, 100); // white
+    noStroke();
+    
     if (!vert)
     {
-      fill(0, 0, 100); // white
       rect(x, y, size * 2, size / 4);
       circle(x, y + size / 4, size / 3);
       circle(x, y, size / 3);
@@ -147,12 +159,12 @@ class Bone
     
     if (x > width)
     {
-      x = 0;
+      x = -size/2;
     }
     
     if (y > height)
     {
-      y = 0;
+      y = -size/4;
     }
   }
 }
