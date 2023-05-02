@@ -21,6 +21,15 @@ void setup()
   ap = minim.loadFile("audio/Megalovania.mp3", 800);
   ap.play();
   ab = ap.mix;
+  
+  int arrayLength = 8;
+  Bone[] bones = new Bone[arrayLength];
+  //bones assigned using x, y, size, xdir, ydir, vert
+  
+  for (int i = 0; i < arrayLength; i++)
+  {
+    bones[i] = (0f, width / (i + 1), 50f, 0.1f, 0f, true);
+  }
 }
 
 void draw()
@@ -92,5 +101,58 @@ void createBone(float startingPosX, float startingPosY, float size, boolean vert
     circle(startingPosX + size / 4, startingPosY, size / 3);
     circle(startingPosX, startingPosY + size * 2, size / 3);
     circle(startingPosX + size / 4, startingPosY + size * 2, size / 3);
+  }
+}
+
+class Bone
+{
+  float x, y, size, xdir, ydir;
+  boolean vert;
+  
+  Bone(float X, float Y, float Size, float Xdir, float Ydir, boolean Vert)
+  {
+    x = X;
+    y = Y;
+    size = Size;
+    xdir = Xdir;
+    ydir = Ydir;
+    vert = Vert;
+  }
+  
+  void display()
+  {
+    if (!vert)
+    {
+      fill(0, 0, 100); // white
+      rect(x, y, size * 2, size / 4);
+      circle(x, y + size / 4, size / 3);
+      circle(x, y, size / 3);
+      circle(x + size * 2, y + size / 4, size / 3);
+      circle(x + size * 2, y, size / 3);
+    }
+    else
+    {
+      rect(x, y, size / 4, size * 2);
+      circle(x, y, size / 3);
+      circle(x + size / 4, y, size / 3);
+      circle(x, y + size * 2, size / 3);
+      circle(x + size / 4, y + size * 2, size / 3);
+    }
+  }
+  
+  void movement()
+  {
+    x += xdir;
+    y += ydir;
+    
+    if (x > width)
+    {
+      x = 0;
+    }
+    
+    if (y > height)
+    {
+      y = 0;
+    }
   }
 }
