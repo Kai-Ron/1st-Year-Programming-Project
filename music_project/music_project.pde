@@ -12,6 +12,7 @@ AudioBuffer ab;
 
 int arrayLength = 8; // Number of bones assigned here
 Bone[] bones = new Bone[arrayLength];
+boolean paused = false;
 
 void setup()
 {
@@ -30,7 +31,7 @@ void setup()
   for (int i = 0; i < arrayLength; i++)
   {
     println(width / arrayLength * i);
-    bones[i] = new Bone(width / arrayLength * i, 0f, 50f, 1, 0f, true);
+    bones[i] = new Bone(width / arrayLength * i, 0, 50f, 2, 0f, true);
   }
 }
 
@@ -42,11 +43,10 @@ void draw()
   for (int i = 0; i < arrayLength; i++)
   {
     bones[i].display();
-  }
-  
-  for (int i = 0; i < arrayLength; i++)
-  {
-    bones[i].movement();
+    if (!paused)
+    {
+      bones[i].movement();
+    }
   }
   
   float totalSound = 0;
@@ -60,7 +60,7 @@ void draw()
     //println("i: " + i);
     //println("ab.size: " + ab.size());
     totalSound += abs(ab.get(i));
-    float m = map(i, 0, ab.size(), 0, 360); // For color
+    float m = map(i, 0, ab.size(), 0, 360); // For rainbow gradient
     //println(m);
     //stroke(m, 100, 100); This makes the line gradient through all 360 degrees of color in HSB
     line(i, half, i, half + ab.get(i) * half / 2); // add lerp to make less jarring?
@@ -70,9 +70,6 @@ void draw()
   visSound = lerp(visSound, avgSound, 0.1);
   soundLerp = visSound * 10000;
   circle(half, half, 100 + soundLerp / 2); // add lerp to make less jarring?
-  
-  createBone(100, 100, 50, false);
-  createBone(600, 500, 50, true);
 }
 
 void keyPressed()
@@ -81,33 +78,14 @@ void keyPressed()
   {
     if (ap.isPlaying())
     {
+      paused = true;
       ap.pause();
     }
     else
     {
+      paused = false;
       ap.play();
     }
-  }
-}
-
-void createBone(float startingPosX, float startingPosY, float size, boolean vertical)
-{
-  noStroke();
-  if (!vertical)
-  {
-    rect(startingPosX, startingPosY, size * 2, size / 4);
-    circle(startingPosX, startingPosY + size / 4, size / 3);
-    circle(startingPosX, startingPosY, size / 3);
-    circle(startingPosX + size * 2, startingPosY + size / 4, size /3);
-    circle(startingPosX + size * 2, startingPosY, size / 3);
-  }
-  else
-  {
-    rect(startingPosX, startingPosY, size / 4, size * 2);
-    circle(startingPosX, startingPosY, size / 3);
-    circle(startingPosX + size / 4, startingPosY, size / 3);
-    circle(startingPosX, startingPosY + size * 2, size / 3);
-    circle(startingPosX + size / 4, startingPosY + size * 2, size / 3);
   }
 }
 
@@ -129,7 +107,7 @@ class Bone
   void display()
   {
     fill(0, 0, 100); // white
-    noStroke();
+    stroke(0, 0, 100); // white
     
     if (!vert)
     {
@@ -147,6 +125,7 @@ class Bone
       circle(x, y + size * 2, size / 3);
       circle(x + size / 4, y + size * 2, size / 3);
     }
+    stroke(0, 0, 50); // grey
   }
   
   void movement()
