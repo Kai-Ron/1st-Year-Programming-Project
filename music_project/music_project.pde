@@ -29,7 +29,8 @@ void setup()
   
   for (int i = 0; i < arrayLength; i++)
   {
-    bones[i] = new Bone(width / (i + 1), 0f, 50f, 1, 0f, true);
+    println(width / arrayLength * i);
+    bones[i] = new Bone(width / arrayLength * i, 0f, 50f, 1, 0f, true);
   }
 }
 
@@ -65,14 +66,10 @@ void draw()
     line(i, half, i, half + ab.get(i) * half / 2); // add lerp to make less jarring?
   }
   
-  println("totalSound: " + totalSound);
   avgSound = totalSound / ab.size();
-  println("avgSound: " + avgSound);
   visSound = lerp(visSound, avgSound, 0.1);
-  println("visSound: " + visSound);
   soundLerp = visSound * 10000;
   circle(half, half, 100 + soundLerp / 2); // add lerp to make less jarring?
-  println("soundlerp" + soundLerp);
   
   createBone(100, 100, 50, false);
   createBone(600, 500, 50, true);
