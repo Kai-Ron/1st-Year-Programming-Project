@@ -9,6 +9,7 @@ Minim minim;
 AudioPlayer ap;
 AudioInput ai;
 AudioBuffer ab;
+PFont font;
 
 int arrayLength = 8; // Number of bones assigned here
 Bone[] bones = new Bone[arrayLength];
@@ -25,6 +26,9 @@ void setup()
   ap = minim.loadFile("audio/Megalovania.mp3", 800);
   ap.play();
   ab = ap.mix;
+  font = createFont("font/8bitoperator_jve.ttf", 20);
+  textFont(font);
+  textAlign(CENTER);
   
   //bones assigned using x, y, size, xdir, ydir, vert
   
@@ -39,6 +43,8 @@ void draw()
 { 
   background(0, 0, 0); //black
   stroke(0, 0, 50); //grey
+  
+  text("Press [space] to pause", width / 2, 700);
   
   for (int i = 0; i < arrayLength; i++)
   {
