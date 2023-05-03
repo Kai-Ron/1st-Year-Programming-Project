@@ -16,6 +16,22 @@ int arrayLength = 8; // Number of bones assigned here
 Bone[] bones = new Bone[arrayLength];
 boolean paused = false;
 
+<<<<<<< Updated upstream
+=======
+int[] r = new int[8];
+int[] g = new int[8];
+int[] b = new int[8];
+
+Heart[] hearts = new Heart[8];
+
+int minSaturation = 50;
+int maxSaturation = 100;
+int saturationMovement = 1;
+int saturation = minSaturation + saturationMovement;
+
+//Heart heart = new Heart(400, 400, 50, 50, 50, color(200, 100, 100));
+
+>>>>>>> Stashed changes
 void setup()
 {
   colorMode(HSB, 360, 100, 100);
@@ -44,6 +60,7 @@ void setup()
 
 void draw()
 { 
+<<<<<<< Updated upstream
   background(0, 0, 0); //black
   stroke(0, 0, 50); //grey
   
@@ -54,8 +71,24 @@ void draw()
     line(i, height, i, height - fft.getBand(i) * 8);
     println(fft.getBand(i));
   }*/
+=======
+  background(0, 0, 0); // black
+  stroke(0, 0, 50); // grey
+  
+  if (saturation >= maxSaturation)
+  {
+    saturationMovement = -1;
+  }
+  if (saturation <= minSaturation)
+  {
+    saturationMovement = 1;
+  }
+  saturation += saturationMovement;
+  fill(0, 0, saturation);
+>>>>>>> Stashed changes
   
   text("Press [space] to pause", width / 2, 700);
+  fill (0, 0, 100); // white
   
   for (int i = 0; i < arrayLength; i++)
   {
