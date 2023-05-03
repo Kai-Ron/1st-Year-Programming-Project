@@ -70,7 +70,7 @@ for (int i = 0; i < hearts.length; i++)
   colorMode(HSB);
 }
   
-  frameRate(fps);
+ frameRate(fps);
  unit = height / 100;
  strokeWeight(unit/10.24);
  groundLineY = height * 2/4;
@@ -262,12 +262,16 @@ class Heart
       noStroke();
       // circle(x, y, size);
       
+      pushMatrix();
+      translate(x, y);
+      rotate(radians);
       beginShape();
-      vertex(x, y);
-      bezierVertex(x, y - (size/4), x + (size/2), y - (size/8), x, y + (size/4));
-      vertex(x, y);
-      bezierVertex(x, y - (size/4), x - (size/2), y - (size/8), x, y + (size/4));
+      vertex(0, 0);
+      bezierVertex(- size/4, 0, - size/8, size/2, size/4, 0);
+      vertex(0, 0);
+      bezierVertex(- size/4, 0, - size/8, - size/2, size/4, 0);
       endShape();
+      popMatrix();
       
     }
   }
