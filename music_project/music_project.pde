@@ -33,6 +33,11 @@ int[] b = new int[8];
 
 Heart[] hearts = new Heart[8];
 
+int maxSaturation = 100;
+int minSaturation = 50;
+int saturationMovement = 1;
+int saturation = maxSaturation;
+
 //Heart heart = new Heart(400, 400, 50, 50, 50, color(200, 100, 100));
 
 void setup()
@@ -105,10 +110,21 @@ for (int i = 0; i < hearts.length; i++)
 
 void draw()
 { 
-  background(0, 0, 0); //black
-  stroke(0, 0, 50); //grey
-  fill (0, 0, 100); // white
+  background(0, 0, 0); // black
+  stroke(0, 0, 50); // grey
+  fill(0, 0, saturation);
+  if (saturation <= minSaturation)
+  {
+    saturationMovement = 1;
+  }
+  if (saturation >= maxSaturation)
+  {
+    saturationMovement = -1;
+  }
+  saturation += saturationMovement;
+  
   text("Press [space] to pause", width / 2, 700);
+  fill (0, 0, 100); // white
   
   for (int i = 0; i < arrayLength; i++)
   {
@@ -257,9 +273,12 @@ class Heart
     
     void update()
     {
-      radians += (velocity / 10000);
-      x = startX + (cos(radians) * radius);
-      y = startY + (sin(radians) * radius);
+      if (!paused)
+      {
+        radians += (velocity / 10000);
+        x = startX + (cos(radians) * radius);
+        y = startY + (sin(radians) * radius);
+      }
     }
     
     void display()
