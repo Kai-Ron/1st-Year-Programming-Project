@@ -10,6 +10,7 @@ AudioPlayer ap;
 AudioInput ai;
 AudioBuffer ab;
 PFont font;
+FFT fft;
 
 int arrayLength = 8; // Number of bones assigned here
 Bone[] bones = new Bone[arrayLength];
@@ -23,7 +24,7 @@ void setup()
   size(800, 800);
   
   minim = new Minim(this);
-  ap = minim.loadFile("audio/Megalovania.mp3", 800);
+  ap = minim.loadFile("audio/Megalovania.mp3", 1024);
   ap.play();
   ab = ap.mix;
   font = createFont("font/8bitoperator_jve.ttf", 20);
@@ -31,18 +32,28 @@ void setup()
   textAlign(CENTER);
   
   //bones assigned using x, y, size, xdir, ydir, vert
-  
   for (int i = 0; i < arrayLength; i++)
   {
-    println(width / arrayLength * i);
     bones[i] = new Bone(width / arrayLength * i, 0, 50f, 2, 0f, true);
   }
+  
+  fft = new FFT(ap.bufferSize(), ap.sampleRate());
+  println(ap.bufferSize());
+  println(ap.sampleRate());
 }
 
 void draw()
 { 
   background(0, 0, 0); //black
   stroke(0, 0, 50); //grey
+  
+  fft.forward(ap.mix);
+  
+  /*for (int i = 0; i < fft.specSize(); i++)
+  {
+    line(i, height, i, height - fft.getBand(i) * 8);
+    println(fft.getBand(i));
+  }*/
   
   text("Press [space] to pause", width / 2, 700);
   
@@ -63,10 +74,8 @@ void draw()
   
   for (int i = 0; i < ab.size(); i++)
   {
-    //println("i: " + i);
-    //println("ab.size: " + ab.size());
     totalSound += abs(ab.get(i));
-    float m = map(i, 0, ab.size(), 0, 360); // For rainbow gradient
+    //float m = map(i, 0, ab.size(), 0, 360); // For rainbow gradient
     //println(m);
     //stroke(m, 100, 100); This makes the line gradient through all 360 degrees of color in HSB
     line(i, half, i, half + ab.get(i) * half / 2); // add lerp to make less jarring?
