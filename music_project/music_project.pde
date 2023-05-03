@@ -107,7 +107,7 @@ void draw()
 { 
   background(0, 0, 0); //black
   stroke(0, 0, 50); //grey
-  
+  fill (0, 0, 100); // white
   text("Press [space] to pause", width / 2, 700);
   
   for (int i = 0; i < arrayLength; i++)
