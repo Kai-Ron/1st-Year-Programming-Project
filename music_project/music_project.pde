@@ -69,18 +69,18 @@ void setup()
   b[6] = 255;
   b[7] = 255;
 
-for (int i = 0; i < hearts.length; i++)
-{
-  colorMode(RGB);
-  hearts[i] = new Heart(width / 2.0f, height / 2.0f, 50, 75, 25, (PI/4) * i, r[i], g[i], b[i]);
-  colorMode(HSB);
-}
+  for (int i = 0; i < hearts.length; i++)
+  {
+    colorMode(RGB);
+    hearts[i] = new Heart(width / 2.0f, height / 2.0f, 50, 75, 25, (PI/4) * i, r[i], g[i], b[i]);
+    colorMode(HSB);
+  }
   
- frameRate(fps);
- unit = height / 100;
- strokeWeight(unit/10.24);
- groundLineY = height * 2/4;
- center = new PVector(width / 2, height + 3/4);
+  frameRate(fps);
+  unit = height / 100;
+  strokeWeight(unit/10.24);
+  groundLineY = height * 2/4;
+  center = new PVector(width / 2, height + 3/4);
   
   colorMode(HSB, 360, 100, 100);
   
@@ -106,6 +106,11 @@ for (int i = 0; i < hearts.length; i++)
   ap.loop();
   fft = new FFT(ap.bufferSize(), ap.sampleRate());
   fft.linAverages(bands);
+  k = width/12;
+  for(int i = 0; i < leftBones.length; i++)
+  {
+    leftBones[i] = new Box((k)*i,height-h,x,h);
+  }
 }
 
 void draw()
@@ -162,12 +167,13 @@ void draw()
   
   for (int i = 0; i < hearts.length; i++)
   {
-  hearts[i].update();
-  hearts[i].radius = hearts[i].baseRadius + soundLerp;
-  hearts[i].size = hearts[i].baseSize + soundLerp;
-  hearts[i].velocity = hearts[i].baseVelocity + soundLerp;
-  hearts[i].display();
+    hearts[i].update();
+    hearts[i].radius = hearts[i].baseRadius + soundLerp;
+    hearts[i].size = hearts[i].baseSize + soundLerp;
+    hearts[i].velocity = hearts[i].baseVelocity + soundLerp;
+    hearts[i].display();
   }
+  jump();
 }
 
 void keyPressed()
@@ -187,116 +193,47 @@ void keyPressed()
   }
 }
 
-class Bone
+int k;
+int x = 10;
+int h = 50;
+boolean jump = true;
+float c = 0;
+int j = 5;
+float hh;
+Box[] leftBones = new Box[6];
+
+void jump()
 {
-  float x, y, size, xdir, ydir;
-  boolean vert;
-  
-  Bone(float X, float Y, float Size, float Xdir, float Ydir, boolean Vert)
+  for(int i = 0; i < leftBones.length; i++)
   {
-    x = X;
-    y = Y;
-    size = Size;
-    xdir = Xdir;
-    ydir = Ydir;
-    vert = Vert;
+    //fill(50*i,255,255);
+    leftBones[i].display();
   }
-  
-  void display()
+  circle(width/2,height-c,10);
+  hh = leftBones[j].h+ 10;
+  //float a = hh/(g/2);
+  if(jump && c < hh)
   {
-    fill(0, 0, 100); // white
-    stroke(0, 0, 100); // white
-    
-    if (!vert)
+    c += 2;
+  }else if(jump)
+  {
+    if(leftBones[j].x == (width/2)-1)
     {
-      rect(x, y, size * 2, size / 4);
-      circle(x, y + size / 4, size / 3);
-      circle(x, y, size / 3);
-      circle(x + size * 2, y + size / 4, size / 3);
-      circle(x + size * 2, y, size / 3);
+      jump = false;
+      j--;
+      println(j);
     }
-    else
-    {
-      rect(x, y, size / 4, size * 2);
-      circle(x, y, size / 3);
-      circle(x + size / 4, y, size / 3);
-      circle(x, y + size * 2, size / 3);
-      circle(x + size / 4, y + size * 2, size / 3);
-    }
-    stroke(0, 0, 50); // grey
   }
-  
-  void movement()
+  else
   {
-    x += xdir;
-    y += ydir;
-    
-    if (x > width)
+    c -= 2.5;
+    if(c <= 0)
     {
-      x = -size/2;
+      jump = true;
     }
-    
-    if (y > height)
-    {
-      y = -size/4;
-    }
+  }
+  if(j < 0)
+  {
+    j = leftBones.length-1;
   }
 }
-
-class Heart
-  {
-    float startX, startY, size, radius, velocity;
-    float baseSize, baseRadius, baseVelocity;
-    color colour = color(100, 100, 100);
-    float radians = 0;
-    int r, g, b;
-    
-    float x = 0;
-    float y = -1;
-    
-    Heart(float xPos, float yPos, float diameter, float distance, float speed, float degree, int red, int green, int blue)
-    {
-      startX = xPos;
-      startY = yPos;
-      size = diameter;
-      baseSize = diameter;
-      radius = distance;
-      baseRadius = distance;
-      velocity = speed;
-      baseVelocity = speed;
-      radians = degree;
-      r = red;
-      g = green;
-      b = blue;
-      colour = color(r, g, b);
-    }
-    
-    void update()
-    {
-      if (!paused)
-      {
-        radians += (velocity / 10000);
-        x = startX + (cos(radians) * radius);
-        y = startY + (sin(radians) * radius);
-      }
-    }
-    
-    void display()
-    {
-      fill(colour);
-      noStroke();
-      // circle(x, y, size);
-      
-      pushMatrix();
-      translate(x, y);
-      rotate(radians);
-      beginShape();
-      vertex(0, 0);
-      bezierVertex(- size/4, 0, - size/8, size/2, size/4, 0);
-      vertex(0, 0);
-      bezierVertex(- size/4, 0, - size/8, - size/2, size/4, 0);
-      endShape();
-      popMatrix();
-      
-    }
-  }
