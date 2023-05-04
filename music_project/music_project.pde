@@ -109,7 +109,7 @@ void setup()
   k = 65;
   for(int i = 0; i < leftBones.length; i++)
   {
-    leftBones[i] = new Box((k)*i,height-h,h);
+    leftBones[i] = new Box(-(k*i),height-h,h);
   }
 }
 
@@ -198,12 +198,13 @@ void keyPressed()
 
 int k;
 int x = 10;
-int h = 50;
+int h = 30;
 boolean jump = true;
 float c = 0;
-int j = 5;
+int j = 0;
 float hh;
 Box[] leftBones = new Box[6];
+
 
 void jump()
 {
@@ -213,11 +214,17 @@ void jump()
     leftBones[i].display();
     //text(i,leftBones[i].x,60);
   }
-  circle(width/2,height-c,10);
-  hh = leftBones[j].size+ 20;
+  //circle(width/2,height-c,10);
+  colorMode(RGB);
+  Heart heart = new Heart(width/2, height-c,50,0,0,PI/2,255,0,0);
+  heart.update();
+  heart.display();
+  colorMode(HSB);
+  
+  hh = leftBones[j].size+ 30;
   if(jump && c < hh)
   {
-    c += 1.5;
+    c += 2.5;
   }else if(jump)
   {
     if(leftBones[j].x == (width/2)-1)
@@ -229,7 +236,7 @@ void jump()
   }
   else
   {
-    c -= 2;
+    c -= 3.5;
     if(c <= 0)
     {
       jump = true;
