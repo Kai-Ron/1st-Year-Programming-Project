@@ -173,7 +173,10 @@ void draw()
     hearts[i].velocity = hearts[i].baseVelocity + soundLerp;
     hearts[i].display();
   }
-  jump();
+  if(!paused)
+  {
+    jump();
+  }
 }
 
 void keyPressed()
