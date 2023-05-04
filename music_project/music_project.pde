@@ -106,10 +106,10 @@ void setup()
   ap.loop();
   fft = new FFT(ap.bufferSize(), ap.sampleRate());
   fft.linAverages(bands);
-  k = width/12;
+  k = 65;
   for(int i = 0; i < leftBones.length; i++)
   {
-    leftBones[i] = new Box((k)*i,height-h,x,h);
+    leftBones[i] = new Box((k)*i,height-h,h);
   }
 }
 
@@ -204,36 +204,36 @@ Box[] leftBones = new Box[6];
 
 void jump()
 {
+  fill(255);
   for(int i = 0; i < leftBones.length; i++)
   {
-    //fill(50*i,255,255);
     leftBones[i].display();
+    //text(i,leftBones[i].x,60);
   }
   circle(width/2,height-c,10);
-  hh = leftBones[j].h+ 10;
-  //float a = hh/(g/2);
+  hh = leftBones[j].size+ 20;
   if(jump && c < hh)
   {
-    c += 2;
+    c += 1.5;
   }else if(jump)
   {
     if(leftBones[j].x == (width/2)-1)
     {
       jump = false;
-      j--;
-      println(j);
+      j++;
+      //println(j);
     }
   }
   else
   {
-    c -= 2.5;
+    c -= 2;
     if(c <= 0)
     {
       jump = true;
     }
   }
-  if(j < 0)
+  if(j == leftBones.length)
   {
-    j = leftBones.length-1;
+    j = 0;
   }
 }

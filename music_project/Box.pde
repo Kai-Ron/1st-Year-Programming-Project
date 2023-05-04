@@ -2,21 +2,27 @@ class Box
 {
   int x;
   int y;
-  int w;
-  int h;
+  int size;
   
-  Box(int x, int y, int w, int h)
+  Box(int x, int y, int size)
   {
     this.x = x;
     this.y = y;
-    this.w = w;
-    this.h = h;
+    this.size = size;
   }
   
   void display()
   {
-    rect(x,y,w,h);
-    rect(width-x,y,w,h);
+    rect(x, y, size / 4, size * 2);
+    circle(x, y, size / 3);
+    circle(x + size / 4, y, size / 3);
+    circle(x, y + size * 2, size / 3);
+    circle(x + size / 4, y + size * 2, size / 3);
+    rect(width-x, y, size / 4, size * 2);
+    circle(width-x, y, size / 3);
+    circle(width-x + size / 4, y, size / 3);
+    circle(width-x, y + size * 2, size / 3);
+    circle(width-x + size / 4, y + size * 2, size / 3);
     x++;
     if(x > width/2)
     {
